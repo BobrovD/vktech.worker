@@ -134,6 +134,7 @@ mysql> show tables;
 | script_time      |
 | session          |
 | task             |
+| task_subscribes  |
 | work             |
 +------------------+
 
@@ -204,6 +205,16 @@ mysql> show columns from task;
 | description   | varchar(1000)                                     | NO   |     | NULL    |                |
 | reward        | decimal(8,2)                                      | NO   |     | NULL    |                |
 +---------------+---------------------------------------------------+------+-----+---------+----------------+
+
+mysql> show columns from task_subscribes;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| row_id      | int(11)     | NO   | PRI | NULL    | auto_increment |
+| task_id     | int(11)     | NO   |     | NULL    |                |
+| executor_id | int(11)     | NO   |     | NULL    |                |
+| mask        | varchar(21) | NO   | UNI | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
 
 mysql> show columns from work;
 +----------+------------------------------------+------+-----+---------+----------------+
