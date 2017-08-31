@@ -50,16 +50,21 @@ function work_hard($task){
 
 function send_email_notification($task){
     $data = unserialize($task['data']);
-    $to = $data['email'];
+    $to = '';
     $title = '';
     $message = '';
     switch($data['action']){
         case 'send_new_pwd':
             $title = 'Обновление пароля на eXOR';
             $message = 'Новый пароль: '.$data['pwd'];
+            $to = $data['email'];
+            break;
+        case 'new_subscriber':
+            $title = 'Выберите исполнителя задания';
+            $message = 'Появился новый исполнитель для задания №'.$data['task_id'];
+            $to = get_email_by_id($data['customer_id']);
             break;
     }
-    echo $to.$message;
     return create_mail($to, $title, $message);
 }
 
@@ -67,4 +72,18 @@ function create_mail($to, $title, $message){
     $from = 'no-reply@execordervk.tech';
     $headers = 'From: '.$from;
     return mail($to, $title, $message, $headers);
+}
+
+function get_email_by_id($user_id){
+    $table = 'account';
+    $server = 'slave';
+    $query = 'SELECT email FROM '.$table.' WHERE id = \''.$user_id.'\'';
+    return query_ass_one($table, $server, $query);
+}
+
+function get_customer_id($task_id){
+    $table = 'task';
+    $server = 'slave';
+    $query = 'SELECT customer_id FROM '.$table.' WHERE task_id = \''.$task_id.'\'';
+    return query_ass_one($table, $server, $query);
 }
